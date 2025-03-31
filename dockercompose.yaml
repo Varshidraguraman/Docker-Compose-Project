@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: mydb
+    environment:
+       MYSQL_ROOT_PASSWORD: root
+       MYSQL_DATABASE: mydb
+       MYSQL_USER: user
+       MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    networks:
+      - webnet
+    volumes:
+      - db_data:/var/lib/mysql
+  web:
+    context: .
+    build: ./dockerfile
+    environment:
+      DB_HOST: db
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: mydb
+    ports:
+      - "8080:8080"
+    networks:
+      - webnet
+    depends_on:
+      - db
+networks:
+   webnet:
+      driver: bridge
+volumes:
+   db_data:
+      
+
+   
+     
+      
